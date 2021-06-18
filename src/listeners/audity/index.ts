@@ -8,10 +8,24 @@ const idadeEmbed = new Discord.MessageEmbed()
     ":a: 18-20 \n\n :b: 21-23 \n\n  :regional_indicator_c: 23-25 \n\n :regional_indicator_d: 25-30 \n\n :regional_indicator_e: 30 ou mais"
   );
 
+enum Reactions {
+  A = ":a:",
+  B = ":b:",
+  C = ":regional_indicator_c:",
+  D = ":regional_indicator_d:",
+  E = ":regional_indicator_e:"
+}
+
 type Audity = {
   audityId: string;
   userId: string;
-  question: string;
+  question: {
+    id: number
+    type: string
+    text: string
+    color: string
+    reactions: string[]
+  };
   response?: string;
 };
 
@@ -66,10 +80,13 @@ export async function audity(client: Client) {
         console.log(`question: ${question}`)
         if (!question) return;
 
-        dmChannel.send(question).then(() => {
-          dmChannel.awaitMessages(() => true, { max: 1, time: 300000, errors: ['time']})
-          .then(collected => {
+        await dmChannel.send(question)
+        dmChannel.awaitMessages(() => true, { max: 1, time: 300000, errors: ['time']}).then(collected => {
             dmChannel.send(`sua mensagem foi: ${collected}`)
+            // validation
+            // alter question state in db
+            
+            // send next
           })
         })
       
